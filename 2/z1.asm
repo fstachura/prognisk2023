@@ -1,50 +1,14 @@
 section .text
 global _start
 
-read_input:
-    ; rax - length of read text
-    mov rax, 0
-    mov rdi, 0
-    syscall
-    ret
-
-exit:
-    mov rax, 60
-    mov rdi, 0
-    syscall
-
-convert_to_int:
-    ; r9 - result
-    ; rcx - text length
-    ; rbx - text
-    mov r8, 1
-    mov r9, 0
-    add rbx, rcx
-    dec rbx
-convert_to_int.loop:
-    mov al, [rbx]
-    sub al, '0'
-
-    mov rdx, 0
-    mov ah, 0
-    mov di, 10
-    div di
-    ; rax r rdx
-
-    imul rdx, r8
-    add r9, rdx
-    imul r8, 10 
-
-    sub rbx, 1
-    sub rcx, 1
-    jnz convert_to_int.loop
-
-    mov rax, r9
-    ret
+%include "common.asm"
 
 is_prime:
     ; rdi - number
     mov rcx, 2
+    mov r9, rdi
+    cmp rdi, 2
+    je is_prime.success
 is_prime.loop:
     mov rdx, 0
     mov rax, rdi
@@ -52,13 +16,16 @@ is_prime.loop:
     test rdx, rdx
     jz is_prime.fail
 
-    imul rcx, rcx
-    cmp rcx, rdi
+    inc rcx
+    mov r8, rcx
+    imul r8, r8
+    cmp r8, r9  
     jl is_prime.loop
-    mov rax, 0
+is_prime.success:
+    mov rax, 1
     jmp is_prime.exit
 is_prime.fail:
-    mov rax, 1
+    mov rax, 0
 is_prime.exit:
     ret
 
@@ -74,9 +41,24 @@ _start:
 
     mov rdi, rax
     call is_prime
-
+    
+    cmp rax, 0
+    je _start.response_no
+    mov rsi, response_yes
+    mov rdx, response_yes_len
+    jmp _start.skip_response_no
+_start.response_no:
+    mov rsi, response_no
+    mov rdx, response_no_len
+_start.skip_response_no: 
+    call write_output
     jmp exit
 
 section .data
     number_input times 21 db 0
     number_input_len equ $ - number_input 
+    response_yes db "Number is prime.", 0ah
+    response_yes_len equ $ - response_yes
+    response_no db "Number is not prime.", 0ah
+    response_no_len equ $ - response_no
+

@@ -1,0 +1,7 @@
+file ./z2
+break convert_to_int
+set disassembly-flavor intel
+layout asm
+layout regs
+run < text
+
