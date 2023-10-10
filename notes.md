@@ -27,6 +27,9 @@ zroumieć komputer profesjonalne programowanie cz. 1 i 2
 * sp - stack pointer (szczyt stosu)
 * bp - base pointer (spód stosu)
 * flag - carry, overflow, sign, zero, interrupt, parity, direction
+* r8-r15 in x64
+
+* div - rdx:rax
  
 # 2
 
