@@ -1,0 +1,7 @@
+file ./z3
+break factorize
+set disassembly-flavor intel
+layout asm
+layout regs
+run < text
+

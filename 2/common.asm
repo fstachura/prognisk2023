@@ -9,7 +9,7 @@ read_input:
 
 
 write_output:
-    ; rax - length of written text
+    ; (out) rax - length of written text
     ; rsi - text adress
     ; rdx - text length
     mov rax, 1
@@ -26,8 +26,8 @@ exit:
 
 convert_to_int:
     ; (out) r9 - result
-    ; rcx - text length
     ; rbx - text
+    ; rcx - text length
     mov r8, 1
     mov r9, 0
     add rbx, rcx
