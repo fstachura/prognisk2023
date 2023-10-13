@@ -26,8 +26,10 @@ exit:
 
 convert_to_int:
     ; (out) r9 - result
+    ; (out) r8 - number of bytes read
     ; rbx - text
     ; rcx - text length
+    mov r10, rcx
     mov r8, 1
     mov r9, 0
     add rbx, rcx
@@ -36,6 +38,11 @@ convert_to_int.loop:
     mov al, [rbx]
     cmp al, '-'
     je convert_to_int.exit
+
+    cmp al, '0'
+    jl convert_to_int.exit
+    cmp al, '9'
+    jg convert_to_int.exit
 
     sub al, '0'
 
@@ -59,6 +66,7 @@ convert_to_int.exit:
     neg r9
 
     mov rax, r9
+    sub r10, rcx
 convert_to_int.ret:
     ret
 
