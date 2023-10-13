@@ -5,6 +5,7 @@ global _start
 
 is_prime:
     ; rdi - number
+    ; rax - 1 if prime
     mov rcx, 2
     mov r9, rdi
     cmp rdi, 2
@@ -39,7 +40,7 @@ _start:
     sub rcx, 1                 ; skip newline
     call convert_to_int
 
-    mov rdi, rax
+    mov rdi, r9
     call is_prime
     
     cmp rax, 0

@@ -1,6 +1,5 @@
 file ./z1
-#break _start
-break is_prime
+break _start
 run < text
 set disassembly-flavor intel
 layout asm
