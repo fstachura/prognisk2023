@@ -18,12 +18,19 @@ factorize:
     jge factorize.loop
     neg rdi
 factorize.loop:
-    ; dividie
+    ; if a == 1, return
+    cmp rdi, 1
+    je factorize.ret
+   
+    ; a / factor
     mov rdx, 0
     mov rax, rdi
     div rcx
+    ; if mod != 0, go to loop check
     cmp rdx, 0
     jne factorize.loop_check
+
+    mov rdi, rax
 
     ; save regs before calling int_to_str
     push rcx
@@ -31,6 +38,8 @@ factorize.loop:
     push rsi
     push rbx
     push rdi
+    ; rax = factor
+    mov rax, rcx
     ; rcx = ouptut buffer length
     mov rcx, rbx
     ; rbx = output buffer
@@ -46,7 +55,7 @@ factorize.loop:
     mov rsi, number
     add rsi, number_len
     sub rsi, rax
-    ; write numbre
+    ; write number
     call write_output
 
     ; restore registers
@@ -56,12 +65,20 @@ factorize.loop:
     pop rdi
     pop rcx
 
+    jmp factorize.loop
+
 factorize.loop_check:
+    cmp rcx, 2
+    je factorize.inc
     ; update next factor checked
+    add rcx, 2
+    jmp factorize.loop_end
+factorize.inc:
     inc rcx
+factorize.loop_end:
     ; if current factor is greater than number, exit
     cmp rcx, rdi
-    jge factorize.ret
+    jg factorize.ret
     jmp factorize.loop
 factorize.ret:
     ret

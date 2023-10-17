@@ -45,3 +45,13 @@ zroumieć komputer profesjonalne programowanie cz. 1 i 2
 * `lea rbx, [rel et]` - załaduj policzony adres et (mimo dereferencji)
 * `lea rbx, [rax + rcx + 5]`
 
+# 3 
+
+* `enter N, X` - `push rbp; mov rbp, rsp; sub rsp N;` (X - poziom zagłębień przy funkcjach rekurencyjnych)
+* `leave` - `mov rsp, rbp; pop rbp;`
+* `ret N` - `pop rip; add rsp, n;`
+* `popf/pushf` - ściąga/odkłada rejestr flag
+* `popa/pusha` - ściąga/odkłada wszystkie rejestry
+* `%define c [rbp-24]` - można w kodzie
+* `%undef c`
+

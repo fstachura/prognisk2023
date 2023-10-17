@@ -10,6 +10,7 @@ is_prime:
     mov r9, rdi
     cmp rdi, 2
     je is_prime.success
+    jl is_prime.fail
 is_prime.loop:
     mov rdx, 0
     mov rax, rdi
