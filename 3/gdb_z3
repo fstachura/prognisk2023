@@ -1,0 +1,6 @@
+file ./z3
+break int_to_str_zero
+run < z3_text
+set disassembly-flavor intel
+layout asm
+layout regs
