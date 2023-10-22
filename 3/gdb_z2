@@ -1,0 +1,6 @@
+file ./z2
+break find_max_int
+run
+set disassembly-flavor intel
+layout asm
+layout regs

@@ -137,6 +137,7 @@ int_to_str.exit:
     dec rcx
     inc rax
 
+int_to_str.ret:
     ; calculate result address - rbx = pointer to the end of the buffer
     add rbx, r9
     ; rbx = pointer to start of the number
@@ -146,6 +147,5 @@ int_to_str.exit:
     ; rax = pointer to start of the number
     mov rax, rbx
 
-int_to_str.ret:
     ret
 
