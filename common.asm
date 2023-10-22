@@ -30,54 +30,66 @@ convert_to_int:
     ; rbx - text
     ; rcx - text length
     mov r10, rcx
-    mov rax, 0
+    ; current digit position (multiplied by 10 each time)
     mov r8, 1
     mov r9, 0
+    mov rax, 0
     add rbx, rcx
     dec rbx
-convert_to_int.loop:
-    mov al, [rbx]
-    cmp al, '-'
-    je convert_to_int.exit
 
+convert_to_int.loop:
+    ; get first byte
+    mov al, [rbx]
+    ; check if char is minus, it means that we are at the beginning of the number. exit
+    cmp al, '-'
+    je convert_to_int.exit_neg
+
+    ; check if character is in ascii digit range
     cmp al, '0'
     jl convert_to_int.exit
     cmp al, '9'
     jg convert_to_int.exit
 
+    ; substract 0 to get binary digit
     sub al, '0'
 
-    ;mov rdx, 0
-    ;mov ah, 0
-    ;mov di, 10
-    ;div di
-    ; rax r rdx
-
+    ; multiply digit by r8 (digit position)
     mov rdx, rax
     imul rdx, r8
     add r9, rdx
+
+    ; update r8 (multiply by 10)
     imul r8, 10 
 
+    ; sub rbx to get next digit address
     sub rbx, 1
+    ; sub rcx to update how many chars are left in the buffer
     sub rcx, 1
-    jnz convert_to_int.loop
-convert_to_int.exit:
-    ; if last char was -, negate rax
+    ; check if rcx >= 0, if not, we are at the end of the buffer
+    cmp rcx, 0
+    jge convert_to_int.loop
+
+convert_to_int.exit_neg:
+    ; if last char before exit was -, negate rax
     cmp al, '-'
     jne convert_to_int.ret
     neg r9
 
+convert_to_int.exit:
+    ; save converted number in rax too
     mov rax, r9
     sub r10, rcx
+
 convert_to_int.ret:
     ret
 
 
 int_to_str:
-    ; (out) rax - length of the number
     ; (in) rax - number to convert
-    ; rbx - result buffer
-    ; rcx - buffer length 
+    ; (in) rbx - result buffer
+    ; (in) rcx - buffer length 
+    ; (out) rax - pointer to start of the number
+    ; (out) rcx - number length
     mov r9, rcx     ; used to calculate length of the number
     add rbx, rcx    ; address of first digit
     mov rsi, 10
@@ -124,6 +136,15 @@ int_to_str.exit:
     mov byte [rbx-1], '-'
     dec rcx
     inc rax
+
+    ; calculate result address - rbx = pointer to the end of the buffer
+    add rbx, r9
+    ; rbx = pointer to start of the number
+    sub rbx, rax
+    ; save number length in rcx
+    mov rcx, rax
+    ; rax = pointer to start of the number
+    mov rax, rbx
 
 int_to_str.ret:
     ret
