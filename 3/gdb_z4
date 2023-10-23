@@ -1,0 +1,6 @@
+file ./z4
+break encrypt
+run < z4_text
+set disassembly-flavor intel
+layout asm
+layout regs

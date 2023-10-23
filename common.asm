@@ -1,5 +1,5 @@
 read_input:
-    ; rax - length of read text
+    ; (out) rax - length of read text
     ; rsi - text adress
     ; rdx - text length
     mov rax, 0
