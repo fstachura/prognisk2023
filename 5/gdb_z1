@@ -1,0 +1,6 @@
+file ./z1
+break wartosc
+run
+set disassembly-flavor intel
+layout asm
+layout regs
