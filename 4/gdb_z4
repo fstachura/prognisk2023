@@ -1,0 +1,6 @@
+file ./z4
+break minmax
+run
+set disassembly-flavor intel
+layout asm
+layout regs

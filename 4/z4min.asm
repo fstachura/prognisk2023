@@ -1,0 +1,19 @@
+global minmax
+minmax:push ebx
+mov ecx,[esp+12]
+mov edx,[esp+4*ecx+12]
+mov eax,edx
+l:mov ebx,[esp+4*ecx+12]
+cmp eax,ebx
+jle a
+mov eax,ebx
+a:cmp ebx,edx
+jle n
+mov edx,ebx
+n:dec ecx
+jnz l
+mov ecx,[esp+8]
+mov[ecx], eax
+mov[ecx+4], edx
+pop ebx
+ret

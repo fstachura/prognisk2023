@@ -1,0 +1,6 @@
+file ./z3
+break sortuj
+run
+set disassembly-flavor intel
+layout asm
+layout regs

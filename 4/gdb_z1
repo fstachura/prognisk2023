@@ -1,0 +1,6 @@
+file ./z1min
+break main
+run
+set disassembly-flavor intel
+layout asm
+layout regs
