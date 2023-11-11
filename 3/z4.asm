@@ -115,6 +115,7 @@ _start.loop:
 
 _start.exit:
     jmp exit 
+
     
 section .data
     cipher db "ga","de","ry","po","lu","ki", " -", 0, 0
