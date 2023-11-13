@@ -1,0 +1,7 @@
+file ./z2.min
+break prostopadloscian
+run
+set disassembly-flavor intel
+layout asm
+layout regs
+tui reg float

@@ -1,0 +1,4 @@
+file ./z4.min
+break tablicuj
+run
+tui reg float

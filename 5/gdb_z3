@@ -1,0 +1,4 @@
+file ./z3
+break iloczyn_skalarny
+run
+#tui reg float
