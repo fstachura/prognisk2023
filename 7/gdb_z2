@@ -1,0 +1,6 @@
+file ./z2
+break main
+run
+set disassembly-flavor intel
+layout asm
+layout regs

@@ -1,0 +1,6 @@
+file ./z1
+break suma
+run
+set disassembly-flavor intel
+layout asm
+layout regs
