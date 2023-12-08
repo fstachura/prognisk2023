@@ -1,5 +1,5 @@
-file ./z4
-break podatek
+file ./z3
+break _ZN6BigInt6pomnozEj
 run
 set disassembly-flavor intel
 layout asm
