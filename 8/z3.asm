@@ -396,7 +396,30 @@ _ZmiRK6BigIntS1_:
     ; check which is bigger
     cmp eax, [rsp+28]
     jb .construct_and_copy
+    jne .swap_a_b
 
+.compare_loop_init:
+    mov rsi, [rsp+8]
+    mov r8, [rsi+8]
+    mov rdx, [rsp+16]
+    mov r9, [rdx+8]
+    cmp rax, 0
+    je .construct_and_copy
+    sub rax, 1
+
+.compare_loop:
+    mov r10, [r8+rax*4]
+    cmp r10, [r9+rax*4]
+    jb .swap_a_b
+    ja .construct_and_copy
+    cmp eax, 0
+    je .construct_and_copy
+    sub eax, 1
+    jmp .compare_loop
+
+    jmp .construct_and_copy
+
+.swap_a_b:
     ; restore a and b
     mov rsi, [rsp+8]
     mov rdx, [rsp+16]
@@ -418,6 +441,7 @@ _ZmiRK6BigIntS1_:
 .setup_loop:
     ; rdi - result
     mov rdi, [rsp]
+    mov r11, [rdi]
     mov rdi, [rdi+8]
 
     ; rsi - what to sub
@@ -431,32 +455,74 @@ _ZmiRK6BigIntS1_:
     ; eax - borrow
     mov rax, 0
 
+    mov r9, 0
+    mov r8, 0
+
 .sub_loop:
     cmp ecx, edx
     jge .borrow_check
 
+    mov r9d, [rdi+4*rcx]
     mov r8d, [rsi+4*rcx]
-    sub [rdi+4*rcx], eax
+
+    ; if result[i] == 0
+    cmp r9d, 0
+    jne .non_zero
+
+    ; if c[i] == 0, skip
+    cmp r8d, 0
+    jne .a_zero
+
+    sub dword [rdi+4*rcx], eax
+    jmp .cont_loop_skip_sub
+
+.a_zero:
+    ; substract c[i] from the largest digit
+    mov r9, 0x100000000
+    sub r9, rax
+    sub r9, r8
+    mov [rdi+4*rcx], r9d
+    ;sub r8d, 1
+    mov rax, 1
+    jmp .cont_loop_skip_sub
+
+.non_zero:
+    ; since result[i] is non_zero, carry won't underflow
+    sub r9d, eax
     mov eax, 0
-    jnc .cont_sub
-    ;add dword [rdi+4*rcx], 0xffffffff
-    ;add dword [rdi+4*rcx], 1
-    mov eax, 1
 
-.cont_sub:
-    sub dword [rdi+4*rcx], r8d
+    ; if r9d > r8d, just sub
+    cmp r9d, r8d
+    jb .underflow
 
-    jnc .cont_loop
-    ;add dword [rdi+4*rcx], 0xffffffff
-    ;add dword [rdi+4*rcx], 1
-    mov eax, 1
+    jmp .cont_loop
+
+.underflow:
+    ; else, add carry and sub
+    mov eax, 1 
+    ;mov r10, 0x100000000
+    ;or r9, r10
+    sub r9d, r8d
+    mov [rdi+4*rcx], r9d
+    jmp .cont_loop_skip_sub
 
 .cont_loop:
+    sub r9d, r8d
+    mov [rdi+4*rcx], r9d
+
+.cont_loop_skip_sub:
     add ecx, 1
     jmp .sub_loop
 
+.borrow_check_loop:
+    add rcx, 1
+
 .borrow_check:
+    cmp rcx, r11
+    jge .ret
     sub dword [rdi+4*rcx], eax
+    cmp dword [rdi+4*rcx], 0xffffffff
+    je .borrow_check_loop
 
 .ret:
     mov rax, [rsp]

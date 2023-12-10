@@ -35,17 +35,35 @@ while True:
         result_nums = add_result.split(b" ")[:-1]
         print()
         print("result:")
-        for n in result_nums: print(n.decode("ascii"), end=" ")
+        for n in result_nums: print(n.decode("ascii").ljust(8, "0"), end=" ")
         print()
 
         print()
         print("actual:")
-        actual = abs(convert(a_nums) - convert(b_nums))
-        print(hex(actual))
+        actual_num = convert(a_nums) - convert(b_nums)
+        actual = hex(abs(actual_num))[2:]
+        actual.ljust((len(actual)//8)*8, "0")
+        for i in range(0, len(actual), 8): print(actual[i:i+8], end=" ")
+        print()
 
         received = convert([int(n.decode("ascii"), 16) for n in result_nums])
 
-        if actual != received:
+        if abs(actual_num) != received:
+            for n in a_nums: print(hex(n), end=" ")
+            print()
+            for n in b_nums: print(hex(n), end=" ")
+            print()
+            print(hex(convert(a_nums)), hex(convert(b_nums)))
+            print(hex(actual_num))
+            print(hex(received))
+            a = a_nums
+            b = b_nums
+            if len(b_nums) > len(a_nums): 
+                a, b = b, a
+            for i in range(len(b)):
+                print(a > b, end=" ")
+
+            print()
             print("invalid result")
             exit(-1)
 
