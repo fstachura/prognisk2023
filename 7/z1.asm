@@ -1,4 +1,5 @@
 global suma
+
 suma:
     ; rdi - n
     ; rsi - tab

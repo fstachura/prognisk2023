@@ -1,7 +1,8 @@
 global tablicuj
 tablicuj:sub esp,16
-fld qword[esp+60]
-fld qword[esp+52]
+%define v(n) qword[esp+n]
+fld v(60)
+fld v(52)
 fsubp
 fild dword[esp+68]
 fld1
@@ -9,22 +10,22 @@ fsubp
 fdivp
 mov dword[esp],0
 fldz
-fstp qword[esp+4]
+fstp v(4)
 mov edx,[esp+72]
-fld qword[esp+20]
-fld qword[esp+36]
-fld qword[esp+44]
+fld v(20)
+fld v(36)
+fld v(44)
 fld1
 fld1
 faddp
-.l:fild dword[esp]
+l:fild dword[esp]
 fld st5
 fmulp
-fld qword[esp+52]
+fld v(52)
 faddp
-fld qword[esp+60]
+fld v(60)
 fcomip
-jb .r
+jb r
 fld
 fmulp
 fldpi
@@ -37,23 +38,23 @@ fld st0
 fmulp
 fld st4
 fmulp
-fstp qword[esp+4]
+fstp v(4)
 fld st5
 fld st2
 fmulp
 fsin
 fld st0
 fmulp
-fld qword[esp+28]
+fld v(28)
 fmulp
-fld qword[esp+4]
+fld v(4)
 faddp
 fstp qword[edx]
 add edx,8
 mov eax,[esp]
 inc eax
 mov[esp],eax
-jmp .l
-.r:add esp,16
+jmp l
+r:add esp,16
 finit
 ret

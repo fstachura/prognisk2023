@@ -1,6 +1,9 @@
-file ./z3
-break _ZN6BigInt6pomnozEj
-run
+file ./z3 
+#break operator+(BigInt const&, BigInt const&)
+#break operator+(BigInt const&, BigInt const&) [clone .setup_loop]
+break operator-(BigInt const&, BigInt const&)
+break operator-(BigInt const&, BigInt const&) [clone .setup_loop]
+run < test
 set disassembly-flavor intel
 layout asm
 layout regs
