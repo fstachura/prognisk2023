@@ -1,0 +1,6 @@
+file ./z2
+#break gradientSSE
+run
+set disassembly-flavor intel
+layout asm
+layout regs

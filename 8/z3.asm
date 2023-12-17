@@ -179,7 +179,7 @@ _ZN6BigInt14podzielZResztaEj:
 
 
 ; std::ostream& operator<< (std::ostream& str, const BigInt& x)
-_ZlsRSoRK6BigInt:
+;_ZlsRSoRK6BigInt:
     ; rdi - str
     ; rsi - x
     ; [rsi] - rozmiar

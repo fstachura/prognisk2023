@@ -29,6 +29,38 @@ BigInt::~BigInt(){
   delete[] dane;  
 }
 
+BigInt& BigInt::operator=(const char * liczba) {
+  zeruj(dane, rozmiar);
+  while(*liczba) {
+    BigInt a(1);
+    a.dodaj(*liczba - '0');
+    pomnoz(10);
+    *this = *this + a;
+    liczba++;
+  }
+  return *this;
+}
+
+std::ostream& operator<<(std::ostream& str, const BigInt& x) {
+  BigInt tmp(x);
+  std::string result;
+  result.reserve(10*tmp.rozmiar);
+  int leadingZeros = 0;
+
+  for(int i=0; i != tmp.rozmiar*10; i++) {
+    int mod = tmp.podzielZReszta(10);
+    if(mod == 0) {
+      leadingZeros++;
+    } else {
+      result = std::to_string(mod) + std::string(leadingZeros, '0') + result;
+      leadingZeros = 0;
+    }
+  }
+
+  str << result;
+  return str;
+}
+
 std::ostream& operator<< (std::ostream& str, const BigInt& x);
 //  for(int i=0; i != x.rozmiar; i++) {
 //    str << x.dane[x.rozmiar-1-i] << " ";
@@ -73,6 +105,24 @@ void addTest() {
   std::cout << std::hex << a + b << std::endl;
 }
 
+void addTest2() {
+  std::string a, b;
+  std::cin >> a >> b;
+  BigInt ba(0), bb(0);
+  ba = a.c_str();
+  bb = b.c_str();
+  std::cout << ba + bb << std::endl;
+}
+
+void subTest2() {
+  std::string a, b;
+  std::cin >> a >> b;
+  BigInt ba(0), bb(0);
+  ba = a.c_str();
+  bb = b.c_str();
+  std::cout << ba - bb << std::endl;
+}
+
 void subTest() {
   unsigned int a_len;
   std::cin >> a_len;
@@ -94,7 +144,9 @@ void subTest() {
 int main() {
   //divTest();
   //addTest();
-  subTest();
+  //subTest();
+  //addTest2();
+  subTest2();
 
   //BigInt a(3);
   //a.dane[0] = 0x1;
